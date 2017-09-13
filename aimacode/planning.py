@@ -35,16 +35,23 @@ class Action:
     def substitute(self, e, args):
         """Replaces variables in expression with their respective Propostional symbol"""
         new_args = list(e.args)
+        # print("e - {}".format(e))
+        # print(self.args)
+        # print("Args - ".format(args))
         for num, x in enumerate(e.args):
             for i in range(len(self.args)):
                 if self.args[i] == x:
                     new_args[num] = args[i]
+        # print("e - {}".format(e))
+        # print(new_args)
         return Expr(e.op, *new_args)
 
     def check_precond(self, kb, args):
         """Checks if the precondition is satisfied in the current state"""
         # check for positive clauses
         for clause in self.precond_pos:
+            # print("clause - {}".format(clause))
+            # print("kb - {}".format(kb.clauses))
             if self.substitute(clause, args) not in kb.clauses:
                 return False
         # check for negative clauses
@@ -64,3 +71,4 @@ class Action:
         # add positive literals
         for clause in self.effect_add:
             kb.tell(self.substitute(clause, args))
+        print(kb.clauses)
